@@ -6,8 +6,8 @@ public class MultiplicationTablePrinter {
 
     private final ArrayList<MultiplicationContainer> multiplications;
 
-    public MultiplicationTablePrinter(MultiplicationTable multiplicationTable) {
-        this.multiplications = multiplicationTable.getMultiplicationTable();
+    public MultiplicationTablePrinter(MultiplicationTableCreator multiplicationTableCreator) {
+        this.multiplications = multiplicationTableCreator.getMultiplicationTable();
     }
 
     public void print() {

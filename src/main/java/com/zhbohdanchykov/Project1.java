@@ -13,6 +13,7 @@ public class Project1 {
     private static final Logger logger = LoggerFactory.getLogger(Project1.class);
 
     public static void main(String[] args) {
+        logger.info("Starting Main.");
         Properties properties;
         try {
             properties = new PropertiesLoader(PROPERTIES_FILE).loadProperties();
@@ -21,17 +22,25 @@ public class Project1 {
             return;
         }
 
-        MultiplicationTable table = switch (System.getProperty("type", "int")) {
-            case "float" -> new MultiplicationTable(Float.class, properties);
-            case "double" -> new MultiplicationTable(Double.class, properties);
-            case "short" -> new MultiplicationTable(Short.class, properties);
-            case "byte" -> new MultiplicationTable(Byte.class, properties);
-            case "long" -> new MultiplicationTable(Long.class, properties);
-            case "int" -> new MultiplicationTable(Integer.class, properties);
-            default -> throw new IllegalStateException("Unexpected type: " + System.getProperty("type"));
-        };
+        Class<? extends Number> clazz;
+        try {
+            clazz = new ClassGetter(System.getProperty("type", "int")).getNumericClass();
+            logger.info("Got {} from ClassGetter.", clazz);
+        } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            return;
+        }
+
+        MultiplicationTableCreator table;
+        try {
+            table = new MultiplicationTableCreator(clazz, properties);
+        } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            return;
+        }
 
         MultiplicationTablePrinter printer = new MultiplicationTablePrinter(table);
         printer.print();
+        logger.info("Finished Main.");
     }
 }

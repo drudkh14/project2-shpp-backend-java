@@ -50,6 +50,9 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
+                    <excludes>
+                        <exclude>**/*.properties</exclude>
+                    </excludes>
                     <archive>
                         <manifest>
                             <mainClass>com.zhbohdanchykov.Project1</mainClass>
@@ -107,15 +110,6 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>**/*.properties</exclude>
-                </excludes>
-            </resource>
-        </resources>
     </build>
 
 
