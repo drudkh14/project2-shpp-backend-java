@@ -1,14 +1,11 @@
 package com.zhbohdanchykov;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DecimalMultiplicationStrategyTest {
 
@@ -62,22 +59,22 @@ class DecimalMultiplicationStrategyTest {
         Assertions.assertEquals(BigDecimal.valueOf(6.61), strategy.increment(6.62, -0.01));
     }
 
-//    @ParameterizedTest
-//    @MethodSource("classProvider")
-//    void testIncrementException(Class<? extends Number> clazz) {
-//        DecimalMultiplicationStrategy strategy = new DecimalMultiplicationStrategy(clazz);
-//        if (clazz.equals(Float.class)) {
-//            Assertions.assertThrows(IllegalArgumentException.class,
-//                    () -> strategy.increment(Float.MAX_VALUE, 1.0));
-//            Assertions.assertThrows(IllegalArgumentException.class,
-//                    () -> strategy.increment(Float.MIN_NORMAL, -1.0));
-//        } else {
-//            Assertions.assertThrows(IllegalArgumentException.class,
-//                    () -> strategy.increment(Double.MAX_VALUE, 1.0));
-//            Assertions.assertThrows(IllegalArgumentException.class,
-//                    () -> strategy.increment(Double.MIN_NORMAL, -1.0));
-//        }
-//    }
+    @ParameterizedTest
+    @MethodSource("classProvider")
+    void testIncrementException(Class<? extends Number> clazz) {
+        DecimalMultiplicationStrategy strategy = new DecimalMultiplicationStrategy(clazz);
+        if (clazz.equals(Float.class)) {
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> strategy.increment(Float.MAX_VALUE, 1.0));
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> strategy.increment(Float.MIN_NORMAL, -(Float.MIN_NORMAL / 2.0)));
+        } else {
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> strategy.increment(Double.MAX_VALUE, 1.0));
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> strategy.increment(Double.MIN_NORMAL, -(Double.MIN_NORMAL / 2.0f)));
+        }
+    }
 
     @ParameterizedTest
     @MethodSource("classProvider")
