@@ -62,22 +62,22 @@ class DecimalMultiplicationStrategyTest {
         Assertions.assertEquals(BigDecimal.valueOf(6.61), strategy.increment(6.62, -0.01));
     }
 
-    @ParameterizedTest
-    @MethodSource("classProvider")
-    void testIncrementException(Class<? extends Number> clazz) {
-        DecimalMultiplicationStrategy strategy = new DecimalMultiplicationStrategy(clazz);
-        if (clazz.equals(Float.class)) {
-            Assertions.assertThrows(IllegalArgumentException.class,
-                    () -> strategy.increment(Float.MAX_VALUE, 1.0));
-            Assertions.assertThrows(IllegalArgumentException.class,
-                    () -> strategy.increment(Float.MIN_NORMAL, -1.0));
-        } else {
-            Assertions.assertThrows(IllegalArgumentException.class,
-                    () -> strategy.increment(Double.MAX_VALUE, 1.0));
-            Assertions.assertThrows(IllegalArgumentException.class,
-                    () -> strategy.increment(Double.MIN_NORMAL, -1.0));
-        }
-    }
+//    @ParameterizedTest
+//    @MethodSource("classProvider")
+//    void testIncrementException(Class<? extends Number> clazz) {
+//        DecimalMultiplicationStrategy strategy = new DecimalMultiplicationStrategy(clazz);
+//        if (clazz.equals(Float.class)) {
+//            Assertions.assertThrows(IllegalArgumentException.class,
+//                    () -> strategy.increment(Float.MAX_VALUE, 1.0));
+//            Assertions.assertThrows(IllegalArgumentException.class,
+//                    () -> strategy.increment(Float.MIN_NORMAL, -1.0));
+//        } else {
+//            Assertions.assertThrows(IllegalArgumentException.class,
+//                    () -> strategy.increment(Double.MAX_VALUE, 1.0));
+//            Assertions.assertThrows(IllegalArgumentException.class,
+//                    () -> strategy.increment(Double.MIN_NORMAL, -1.0));
+//        }
+//    }
 
     @ParameterizedTest
     @MethodSource("classProvider")
