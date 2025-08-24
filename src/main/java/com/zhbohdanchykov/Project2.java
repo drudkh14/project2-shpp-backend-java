@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Project1 {
+public class Project2 {
 
     private static final String PROPERTIES_FILE = "project1.properties";
 
-    private static final Logger logger = LoggerFactory.getLogger(Project1.class);
+    private static final Logger logger = LoggerFactory.getLogger(Project2.class);
 
     public static void main(String[] args) {
         logger.info("Starting Main.");
