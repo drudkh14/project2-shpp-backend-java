@@ -13,7 +13,6 @@ public class Project2 {
     private static final Logger logger = LoggerFactory.getLogger(Project2.class);
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
         logger.info("Starting Main.");
         Properties properties;
         try {
