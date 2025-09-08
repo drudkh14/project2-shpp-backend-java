@@ -1,9 +1,9 @@
 <configuration>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/project-1.log</file>
+        <file>logs/project-2.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/project-1-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/project-2-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
 
@@ -25,6 +25,16 @@
             <level>ERROR</level>
         </filter>
     </appender>
+
+    <appender name="OUTPUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.zhbohdanchykov.MultiplicationTablePrinter" level="INFO" additivity="false">
+        <appender-ref ref="OUTPUT"/>
+    </logger>
 
     <root level="debug">
         <appender-ref ref="CONSOLE"/>

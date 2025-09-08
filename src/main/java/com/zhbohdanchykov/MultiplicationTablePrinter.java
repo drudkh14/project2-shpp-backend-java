@@ -1,8 +1,13 @@
 package com.zhbohdanchykov;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 public class MultiplicationTablePrinter {
+
+    private static final Logger logger = LoggerFactory.getLogger(MultiplicationTablePrinter.class);
 
     private final ArrayList<MultiplicationContainer> multiplications;
 
@@ -24,7 +29,7 @@ public class MultiplicationTablePrinter {
 
         for (MultiplicationContainer multiplication : multiplications) {
             if (!row.equals(multiplication.firstOperand())) {
-                System.out.print("|\n");
+                logger.info("|\n");
                 row = multiplication.firstOperand();
             }
 
@@ -33,8 +38,8 @@ public class MultiplicationTablePrinter {
 
             String formatted = String.format("|%" + leftPadding + "s%s%" + rightPadding + "s",
                     "", multiplication, "");
-            System.out.print(formatted);
+            logger.info(formatted);
         }
-        System.out.println("|\n");
+        logger.info("|\n");
     }
 }

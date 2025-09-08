@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class Project2 {
 
-    private static final String PROPERTIES_FILE = "project1.properties";
+    private static final String PROPERTIES_FILE = "project2.properties";
 
     private static final Logger logger = LoggerFactory.getLogger(Project2.class);
 
