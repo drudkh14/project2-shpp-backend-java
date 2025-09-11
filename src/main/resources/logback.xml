@@ -28,15 +28,15 @@
 
     <appender name="OUTPUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%msg</pattern>
+            <pattern>%msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.zhbohdanchykov.MultiplicationTablePrinter" level="INFO" additivity="false">
+    <logger name="PrinterLogger" level="INFO" additivity="false">
         <appender-ref ref="OUTPUT"/>
     </logger>
 
-    <root level="debug">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>

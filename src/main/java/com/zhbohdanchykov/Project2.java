@@ -34,13 +34,12 @@ public class Project2 {
         MultiplicationTableCreator table;
         try {
             table = new MultiplicationTableCreator(clazz, properties);
-        } catch (IllegalArgumentException e) {
+            table.printMultiplicationTable();
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return;
         }
 
-        MultiplicationTablePrinter printer = new MultiplicationTablePrinter(table);
-        printer.print();
         logger.info("Finished Main.");
     }
 }
