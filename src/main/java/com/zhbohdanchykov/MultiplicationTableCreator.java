@@ -1,9 +1,9 @@
 package com.zhbohdanchykov;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class MultiplicationTableCreator {
@@ -14,6 +14,7 @@ public class MultiplicationTableCreator {
     private final Number inc;
 
     private final Logger logger = LoggerFactory.getLogger(MultiplicationTableCreator.class);
+    private final Logger printer = LoggerFactory.getLogger("PrinterLogger");
 
     public MultiplicationTableCreator(Class<? extends Number> type, Properties props) throws IllegalArgumentException {
         try {
@@ -40,6 +41,9 @@ public class MultiplicationTableCreator {
                     inc, min, max);
             throw new IllegalArgumentException("For negative increment maximal value must to be less than minimal.");
         }
+
+        logger.info("Created Multiplication Table and got min {} max {} increment {} strategy {}.",
+                min, max, inc, strategy);
     }
 
     private Number cast(String value, Class<? extends Number> type) {
@@ -81,19 +85,31 @@ public class MultiplicationTableCreator {
         }
     }
 
-    public ArrayList<MultiplicationContainer> getMultiplicationTable() {
-        ArrayList<MultiplicationContainer> multiplications = new ArrayList<>();
-        logger.debug("Created ArrayList for multiplication table.");
+    public void printMultiplicationTable() throws JsonProcessingException {
+        logger.info("Starting printing of multiplication table.");
         for (Number i = min; shouldContinue(i, max, inc); i = strategy.increment(i, inc)) {
             for (Number j = i; shouldContinue(j, max, inc); j = strategy.increment(j, inc)) {
                 Number result = strategy.multiply(i, j);
                 logger.trace("Multiplication result {} for {} and {}.", result, i, j);
-                MultiplicationContainer current = new MultiplicationContainer(i, j, result);
-                multiplications.add(current);
+                printCurrentMultiplication(new MultiplicationContainer(i, j, result));
             }
         }
-        logger.debug("Multiplication table created.");
-        return multiplications;
+        logger.info("Finished printing of multiplication table.");
+    }
+
+    private void printCurrentMultiplication(MultiplicationContainer multiplicationContainer)
+            throws JsonProcessingException {
+        Serializer<MultiplicationContainer> serializer = new Serializer<>(multiplicationContainer);
+        String output;
+        String format = System.getProperty("format");
+        if (format == null) {
+            output = multiplicationContainer.toString();
+            logger.info("No format specified for multiplication table. Using standard output.");
+        } else {
+            logger.info("Using format {}.", format);
+            output = format.equals("xml") ? serializer.serializeToXml() : serializer.serializeToJson();
+        }
+        printer.info(output);
     }
 
     private boolean shouldContinue(Number a, Number b, Number inc) {

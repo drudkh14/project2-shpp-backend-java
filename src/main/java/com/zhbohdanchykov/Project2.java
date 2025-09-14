@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class Project2 {
 
-    private static final String PROPERTIES_FILE = "project1.properties";
+    private static final String PROPERTIES_FILE = "project2.properties";
 
     private static final Logger logger = LoggerFactory.getLogger(Project2.class);
 
@@ -34,13 +34,12 @@ public class Project2 {
         MultiplicationTableCreator table;
         try {
             table = new MultiplicationTableCreator(clazz, properties);
-        } catch (IllegalArgumentException e) {
+            table.printMultiplicationTable();
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return;
         }
 
-        MultiplicationTablePrinter printer = new MultiplicationTablePrinter(table);
-        printer.print();
         logger.info("Finished Main.");
     }
 }
