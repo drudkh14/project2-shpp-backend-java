@@ -6,25 +6,25 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
-public class MultiplicationTableCreator {
+public class MultiplicationTable {
 
     private final MultiplicationStrategy strategy;
     private final Number min;
     private final Number max;
     private final Number inc;
 
-    private final Logger logger = LoggerFactory.getLogger(MultiplicationTableCreator.class);
+    private final Logger logger = LoggerFactory.getLogger(MultiplicationTable.class);
     private final Logger printer = LoggerFactory.getLogger("PrinterLogger");
 
-    public MultiplicationTableCreator(Class<? extends Number> type, Properties props) throws IllegalArgumentException {
+    public MultiplicationTable(Class<? extends Number> type, Properties props) throws IllegalArgumentException {
         try {
             this.strategy = getMultiplicationStrategy(type);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        this.max = cast(props.getProperty("max"), type);
-        this.min = cast(props.getProperty("min"), type);
-        this.inc = cast(props.getProperty("inc"), type);
+        this.max = castValue(props.getProperty("max"), type);
+        this.min = castValue(props.getProperty("min"), type);
+        this.inc = castValue(props.getProperty("inc"), type);
 
         if (strategy.areEqual(min, max)) {
             logger.debug("Min {} and max {} are the same.", min, max);
@@ -46,7 +46,7 @@ public class MultiplicationTableCreator {
                 min, max, inc, strategy);
     }
 
-    private Number cast(String value, Class<? extends Number> type) {
+    private Number castValue(String value, Class<? extends Number> type) {
         logger.debug("Casting value {} to type {}.", value, type);
         Number result = null;
         if (type.equals(Integer.class)) {

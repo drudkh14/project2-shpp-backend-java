@@ -31,9 +31,9 @@ public class Project2 {
             return;
         }
 
-        MultiplicationTableCreator table;
+        MultiplicationTable table;
         try {
-            table = new MultiplicationTableCreator(clazz, properties);
+            table = new MultiplicationTable(clazz, properties);
             table.printMultiplicationTable();
         } catch (Exception e) {
             logger.error(e.getMessage());
