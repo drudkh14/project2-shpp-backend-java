@@ -5,41 +5,16 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
-public class DecimalMultiplicationStrategy implements MultiplicationStrategy {
+public class DecimalStrategy implements NumberStrategy {
 
     private final BigDecimal minValue;
     private final BigDecimal maxValue;
 
-    private final Logger logger = LoggerFactory.getLogger(DecimalMultiplicationStrategy.class);
+    private final Logger logger = LoggerFactory.getLogger(DecimalStrategy.class);
 
-    public DecimalMultiplicationStrategy(Class<? extends Number> type) throws IllegalArgumentException {
-        try {
-            this.minValue = getMinValue(type);
-            this.maxValue = getMaxValue(type);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        logger.info("Created DecimalMultiplicationStrategy for type {}.", type);
-    }
-
-    private BigDecimal getMaxValue(Class<? extends Number> type) throws IllegalArgumentException {
-        if (type.equals(Float.class)) {
-            return BigDecimal.valueOf(Float.MAX_VALUE);
-        } else if (type.equals(Double.class)) {
-            return BigDecimal.valueOf(Double.MAX_VALUE);
-        } else {
-            throw new IllegalArgumentException("Unsupported type for DecimalMultiplicationStrategy: " + type);
-        }
-    }
-
-    private BigDecimal getMinValue(Class<? extends Number> type) throws IllegalArgumentException {
-        if (type.equals(Float.class)) {
-            return BigDecimal.valueOf(Float.MIN_NORMAL);
-        } else if (type.equals(Double.class)) {
-            return BigDecimal.valueOf(Double.MIN_NORMAL);
-        } else {
-            throw new IllegalArgumentException("Unsupported type for DecimalMultiplicationStrategy: " + type);
-        }
+    public DecimalStrategy(Number minValue, Number maxValue) {
+        this.minValue = BigDecimal.valueOf(minValue.doubleValue());
+        this.maxValue = BigDecimal.valueOf(maxValue.doubleValue());
     }
 
     @Override

@@ -5,49 +5,16 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 
-public class IntegerMultiplicationStrategy implements MultiplicationStrategy {
+public class IntegerStrategy implements NumberStrategy {
 
     private final BigInteger minValue;
     private final BigInteger maxValue;
 
-    private final Logger logger = LoggerFactory.getLogger(IntegerMultiplicationStrategy.class);
+    private final Logger logger = LoggerFactory.getLogger(IntegerStrategy.class);
 
-    public IntegerMultiplicationStrategy(Class<? extends Number> type) throws IllegalArgumentException {
-        try {
-            this.minValue = getMinValue(type);
-            this.maxValue = getMaxValue(type);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        logger.info("Created IntegerMultiplicationStrategy for {}.", type);
-    }
-
-    private BigInteger getMaxValue(Class<? extends Number> type) throws IllegalArgumentException {
-        if (type.equals(Integer.class)) {
-            return BigInteger.valueOf(Integer.MAX_VALUE);
-        } else if (type.equals(Long.class)) {
-            return BigInteger.valueOf(Long.MAX_VALUE);
-        } else if (type.equals(Byte.class)) {
-            return BigInteger.valueOf(Byte.MAX_VALUE);
-        } else if (type.equals(Short.class)) {
-            return BigInteger.valueOf(Short.MAX_VALUE);
-        } else {
-            throw new IllegalArgumentException("Unsupported type for IntegerMultiplicationStrategy: " + type);
-        }
-    }
-
-    private BigInteger getMinValue(Class<? extends Number> type) throws IllegalArgumentException {
-        if (type.equals(Integer.class)) {
-            return BigInteger.valueOf(Integer.MIN_VALUE);
-        } else if (type.equals(Long.class)) {
-            return BigInteger.valueOf(Long.MIN_VALUE);
-        } else if (type.equals(Byte.class)) {
-            return BigInteger.valueOf(Byte.MIN_VALUE);
-        } else if (type.equals(Short.class)) {
-            return BigInteger.valueOf(Short.MIN_VALUE);
-        } else {
-            throw new IllegalArgumentException("Unsupported type for IntegerMultiplicationStrategy: " + type);
-        }
+    public IntegerStrategy(Number minValue, Number maxValue) {
+        this.minValue = BigInteger.valueOf(minValue.longValue());
+        this.maxValue = BigInteger.valueOf(maxValue.longValue());
     }
 
     @Override

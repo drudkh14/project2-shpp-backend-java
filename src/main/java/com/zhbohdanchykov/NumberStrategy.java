@@ -1,6 +1,6 @@
 package com.zhbohdanchykov;
 
-public interface MultiplicationStrategy {
+public interface NumberStrategy {
     Number multiply(Number a, Number b);
     Number increment(Number a, Number step);
     boolean lessThan(Number a, Number b);
