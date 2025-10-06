@@ -6,15 +6,16 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 
 public class DecimalStrategy implements NumberStrategy {
-
-    private final BigDecimal minValue;
     private final BigDecimal maxValue;
+    private final BigDecimal minValue;
+    private final BigDecimal minNormal;
 
     private final Logger logger = LoggerFactory.getLogger(DecimalStrategy.class);
 
-    public DecimalStrategy(Number minValue, Number maxValue) {
-        this.minValue = BigDecimal.valueOf(minValue.doubleValue());
-        this.maxValue = BigDecimal.valueOf(maxValue.doubleValue());
+    public DecimalStrategy(BigDecimal minNormal, BigDecimal maxValue) {
+        this.minNormal = minNormal;
+        this.maxValue = maxValue;
+        this.minValue = BigDecimal.valueOf(-maxValue.doubleValue());
     }
 
     @Override
@@ -23,8 +24,13 @@ public class DecimalStrategy implements NumberStrategy {
         BigDecimal aValue = BigDecimal.valueOf(a.doubleValue());
         BigDecimal bValue = BigDecimal.valueOf(b.doubleValue());
         BigDecimal result = aValue.multiply(bValue);
+
         if (isNotInRange(result)) {
-            throw new IllegalArgumentException("Out of range: " + result + "for: " + minValue + " and " + maxValue);
+            throw new IllegalArgumentException("Out of range: " + result + " for: " + minValue + " and " + maxValue);
+        }
+
+        if (isNotNormal(result)) {
+            throw new IllegalArgumentException("Unnormalized floating value: " + result);
         }
         return result;
     }
@@ -35,8 +41,13 @@ public class DecimalStrategy implements NumberStrategy {
         BigDecimal aValue = BigDecimal.valueOf(a.doubleValue());
         BigDecimal stepValue = BigDecimal.valueOf(step.doubleValue());
         BigDecimal result = aValue.add(stepValue);
+
         if (isNotInRange(result)) {
             throw new IllegalArgumentException("Out of range: " + result + " for: " + minValue + " and " + maxValue);
+        }
+
+        if (isNotNormal(result)) {
+            throw new IllegalArgumentException("Unnormalized floating value: " + result);
         }
         return result;
     }
@@ -74,7 +85,11 @@ public class DecimalStrategy implements NumberStrategy {
 
     private boolean isNotInRange(BigDecimal result) {
         logger.trace("Got {} for range control in floating number for {} and {}.", result, minValue, maxValue);
-        return (result.abs().compareTo(maxValue) > 0 || result.abs().compareTo(minValue) < 0)
-                && result.compareTo(BigDecimal.valueOf(0)) != 0;
+        return (result.abs().compareTo(maxValue) > 0);
+    }
+
+    private boolean isNotNormal(BigDecimal result) {
+        logger.trace("Got {} for normality control in floating number for {}.", result, minNormal);
+        return (result.abs().compareTo(minNormal) < 0 && result.compareTo(BigDecimal.ZERO) != 0);
     }
 }

@@ -3,21 +3,40 @@ package com.zhbohdanchykov;
 import java.util.Properties;
 
 public class MultiplicationConfigValidator {
-    private final Properties properties;
-    private final NumericType numericType;
-    private final NumberStrategy numberStrategy;
 
-    public MultiplicationConfigValidator(Properties properties, NumericType numericType, NumberStrategy numberStrategy) {
-        this.properties = properties;
-        this.numericType = numericType;
-        this.numberStrategy = numberStrategy;
+    private final NumberStrategy strategy;
+
+    private final String min;
+    private final String max;
+    private final String inc;
+
+    private final Number minNumber;
+    private final Number maxNumber;
+    private final Number incNumber;
+
+    public MultiplicationConfigValidator(Properties properties, NumericType numType, NumberStrategy strategy) {
+        this.strategy = strategy;
+
+        this.min = properties.getProperty("min");
+        this.max = properties.getProperty("max");
+        this.inc = properties.getProperty("inc");
+
+        this.minNumber = numType.castValue(min);
+        this.maxNumber = numType.castValue(max);
+        this.incNumber = numType.castValue(inc);
     }
 
-    public MultiplicationConfig validate() {
-        String min = properties.getProperty("min");
-        String max = properties.getProperty("max");
-        String inc = properties.getProperty("inc");
+    public MultiplicationConfig validate() throws IllegalArgumentException {
+        checkPropertiesAvailability();
+        checkMinMaxNotEqual();
+        checkIncrementNonZero();
+        checkMinMaxNegativeIncrement();
+        checkMinMaxPositiveIncrement();
 
+        return new MultiplicationConfig(minNumber, maxNumber, incNumber);
+    }
+
+    private void checkPropertiesAvailability() throws IllegalArgumentException {
         if (min.isEmpty()) {
             throw new IllegalArgumentException("Missing required property: min.");
         }
@@ -29,32 +48,35 @@ public class MultiplicationConfigValidator {
         if (inc.isEmpty()) {
             throw new IllegalArgumentException("Missing required property: inc.");
         }
+    }
 
-
-        Number minNumber = numericType.castValue(min);
-        Number maxNumber = numericType.castValue(max);
-        Number incNumber = numericType.castValue(inc);
-
-        if (numberStrategy.areEqual(minNumber, maxNumber)) {
-            throw new IllegalArgumentException("Min " + minNumber + " and max " + maxNumber + " are the same.");
+    private void checkMinMaxNotEqual() throws IllegalArgumentException {
+        if (strategy.areEqual(minNumber, maxNumber)) {
+            throw new IllegalArgumentException("Min {" + minNumber + "} and max {" + maxNumber + "} are equal.");
         }
+    }
 
-        if (numberStrategy.areEqual(incNumber, 0)) {
+    private void checkIncrementNonZero() throws IllegalArgumentException {
+        if (strategy.areEqual(incNumber, 0)) {
             throw new IllegalArgumentException("Increment must be a non-zero number.");
         }
+    }
 
-        if (numberStrategy.lessThan(incNumber, 0) && numberStrategy.lessThan(minNumber, maxNumber)) {
-                throw new IllegalArgumentException(
-                        "For negative increment " + incNumber + " min " + minNumber + " must be greater than max " + maxNumber + "."
-                );
-        }
-
-        if (numberStrategy.greaterThan(incNumber, 0) && numberStrategy.greaterThan(minNumber, maxNumber)) {
+    private void checkMinMaxNegativeIncrement() throws IllegalArgumentException {
+        if (strategy.lessThan(incNumber, 0) && strategy.lessThan(minNumber, maxNumber)) {
             throw new IllegalArgumentException(
-                    "For positive increment " + incNumber + " min " + minNumber + " must be less than max " + maxNumber + "."
+                    "For negative increment {" + incNumber + "} min {" + minNumber +
+                            "} must be greater than max {" + maxNumber + "}."
             );
         }
+    }
 
-        return new MultiplicationConfig(minNumber, maxNumber, incNumber);
+    private void checkMinMaxPositiveIncrement() throws IllegalArgumentException {
+        if (strategy.greaterThan(incNumber, 0) && strategy.greaterThan(minNumber, maxNumber)) {
+            throw new IllegalArgumentException(
+                    "For positive increment {" + incNumber + "} min {" + minNumber +
+                            "} must be less than max {" + maxNumber + "}."
+            );
+        }
     }
 }
