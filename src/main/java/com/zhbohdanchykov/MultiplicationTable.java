@@ -22,8 +22,8 @@ public class MultiplicationTable {
 
     public void printMultiplicationTable() {
         logger.info("Starting printing of multiplication table.");
-        for (Number i = min; shouldContinue(i, max, inc); i = strategy.increment(i, inc)) {
-            for (Number j = i; shouldContinue(j, max, inc); j = strategy.increment(j, inc)) {
+        for (Number i = min; isInRange(i, max, inc); i = strategy.increment(i, inc)) {
+            for (Number j = i; isInRange(j, max, inc); j = strategy.increment(j, inc)) {
                 Number result = strategy.multiply(i, j);
                 logger.trace("Multiplication result {} for {} and {}.", result, i, j);
                 printer.info("{} * {} = {}", i, j, result);
@@ -32,7 +32,7 @@ public class MultiplicationTable {
         logger.info("Finished printing of multiplication table.");
     }
 
-    private boolean shouldContinue(Number a, Number b, Number inc) {
+    private boolean isInRange(Number a, Number b, Number inc) {
         if (strategy.lessThan(inc, 0)) {
             return strategy.greaterThanOrEqual(a, b);
         } else {

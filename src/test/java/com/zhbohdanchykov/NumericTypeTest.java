@@ -11,6 +11,16 @@ import java.util.stream.Stream;
 
 class NumericTypeTest {
 
+    public static Stream<Arguments> providerGetNumberStrategy() {
+        return Stream.of(Arguments.of(NumericType.BYTE, IntegerStrategy.class),
+                Arguments.of(NumericType.SHORT, IntegerStrategy.class),
+                Arguments.of(NumericType.INTEGER, IntegerStrategy.class),
+                Arguments.of(NumericType.LONG, IntegerStrategy.class),
+                Arguments.of(NumericType.FLOAT, DecimalStrategy.class),
+                Arguments.of(NumericType.DOUBLE, DecimalStrategy.class)
+        );
+    }
+
     @ParameterizedTest
     @CsvSource({
             "byte, BYTE",
@@ -57,16 +67,6 @@ class NumericTypeTest {
     })
     void testCastValueException(NumericType type, String numberToCast) {
         Assertions.assertThrows(NumberFormatException.class, () -> type.castValue(numberToCast));
-    }
-
-    public static Stream<Arguments> providerGetNumberStrategy() {
-        return Stream.of(Arguments.of(NumericType.BYTE, IntegerStrategy.class),
-                Arguments.of(NumericType.SHORT, IntegerStrategy.class),
-                Arguments.of(NumericType.INTEGER, IntegerStrategy.class),
-                Arguments.of(NumericType.LONG, IntegerStrategy.class),
-                Arguments.of(NumericType.FLOAT, DecimalStrategy.class),
-                Arguments.of(NumericType.DOUBLE, DecimalStrategy.class)
-        );
     }
 
     @ParameterizedTest

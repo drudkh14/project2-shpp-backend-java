@@ -32,17 +32,15 @@ public class Project2 {
             return;
         }
 
-        NumberStrategy strategy = type.getNumberStrategy();
-
         MultiplicationConfig config;
         try {
-            config = new MultiplicationConfigValidator(properties, type, strategy).validate();
+            config = new MultiplicationConfigValidator(properties, type).validate();
         } catch (IllegalArgumentException e) {
             logger.error(e.getMessage(), e);
             return;
         }
 
-        new MultiplicationTable(config, strategy).printMultiplicationTable();
+        new MultiplicationTable(config, type.getNumberStrategy()).printMultiplicationTable();
 
         logger.info("Finished Main.");
     }

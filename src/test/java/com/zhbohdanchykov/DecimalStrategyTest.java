@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 class DecimalStrategyTest {
 
-    public static Stream<Arguments> valueProvider() {
+    private static Stream<Arguments> valueProvider() {
         return Stream.of(Arguments.of(BigDecimal.valueOf(Float.MIN_NORMAL), BigDecimal.valueOf(Float.MAX_VALUE)),
                 Arguments.of(BigDecimal.valueOf(Double.MIN_NORMAL), BigDecimal.valueOf(Double.MAX_VALUE)));
     }
@@ -130,6 +130,7 @@ class DecimalStrategyTest {
         DecimalStrategy strategy = new DecimalStrategy(min, max);
         Assertions.assertTrue(strategy.greaterThanOrEqual(1.5, 1.5));
         Assertions.assertTrue(strategy.greaterThanOrEqual(-3.4, -3.4));
+        Assertions.assertTrue(strategy.greaterThanOrEqual(0.01, 0.001));
         Assertions.assertFalse(strategy.greaterThanOrEqual(0.01, 0.2));
         Assertions.assertFalse(strategy.greaterThanOrEqual(-5.0, 0.001));
         Assertions.assertFalse(strategy.greaterThanOrEqual(0.001, 0.0011));

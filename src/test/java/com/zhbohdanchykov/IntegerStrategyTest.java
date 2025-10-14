@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 class IntegerStrategyTest {
 
-    public static Stream<Arguments> valueProvider() {
+    private static Stream<Arguments> valueProvider() {
         return Stream.of(Arguments.of(BigInteger.valueOf(Byte.MIN_VALUE), BigInteger.valueOf(Byte.MAX_VALUE)),
                 Arguments.of(BigInteger.valueOf(Short.MIN_VALUE), BigInteger.valueOf(Short.MAX_VALUE)),
                 Arguments.of(BigInteger.valueOf(Integer.MIN_VALUE), BigInteger.valueOf(Integer.MAX_VALUE)),
