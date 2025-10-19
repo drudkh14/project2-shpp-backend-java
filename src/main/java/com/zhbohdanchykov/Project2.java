@@ -14,31 +14,33 @@ public class Project2 {
 
     public static void main(String[] args) {
         logger.info("Starting Main.");
+
         Properties properties;
         try {
             properties = new PropertiesLoader(PROPERTIES_FILE).loadProperties();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(String.valueOf(e));
             return;
         }
 
-        Class<? extends Number> clazz;
+        NumericType type;
         try {
-            clazz = new ClassGetter(System.getProperty("type", "int")).getNumericClass();
-            logger.info("Got {} from ClassGetter.", clazz);
+            type = NumericType.fromString(System.getProperty("type", "int"));
+            logger.info("Got {} NumericType.", type);
         } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage());
+            logger.error(String.valueOf(e));
             return;
         }
 
-        MultiplicationTable table;
+        MultiplicationConfig config;
         try {
-            table = new MultiplicationTable(clazz, properties);
-            table.printMultiplicationTable();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+            config = new MultiplicationConfigValidator(properties, type).validate();
+        } catch (IllegalArgumentException e) {
+            logger.error(String.valueOf(e));
             return;
         }
+
+        new MultiplicationTable(config, type.getNumberStrategy()).printMultiplicationTable();
 
         logger.info("Finished Main.");
     }
