@@ -19,7 +19,7 @@ public class Project2 {
         try {
             properties = new PropertiesLoader(PROPERTIES_FILE).loadProperties();
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(String.valueOf(e));
             return;
         }
 
@@ -36,7 +36,7 @@ public class Project2 {
         try {
             config = new MultiplicationConfigValidator(properties, type).validate();
         } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(String.valueOf(e));
             return;
         }
 

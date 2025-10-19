@@ -25,7 +25,7 @@ class NumericTypeTest {
     @CsvSource({
             "byte, BYTE",
             "short, SHORT",
-            "int, INTEGER",
+            "integer, INTEGER",
             "long, LONG",
             "float, FLOAT",
             "double, DOUBLE"
